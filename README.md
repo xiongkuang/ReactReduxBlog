@@ -1,5 +1,5 @@
-# ReduxSimpleStarter
+# ReactReduxBlog
+a simple blog app
 
-	> npm install
-	> npm start
+
 
