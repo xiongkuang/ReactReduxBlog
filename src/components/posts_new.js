@@ -4,24 +4,6 @@ import { createPost} from '../actions/index';
 import {connect} from 'react-redux';
 
 
-const renderInput = field =>
-    <div>
-        <input {...field.input} type={field.type} className="form-control"/>
-        {field.meta.touched &&
-         field.meta.error &&
-        <span className="error">{field.meta.error}</span>}
-    </div>
-
-const renderTextarea = field =>
-    <div>
-        <textarea {...field.input} className="form-control"/>
-        {field.meta.touched &&
-        field.meta.error &&
-        <span className="error">{field.meta.error}</span>}
-    </div>
-
-
-
 class PostsNew extends Component{
     render(){
         const { handleSubmit } = this.props;
@@ -29,34 +11,70 @@ class PostsNew extends Component{
         return(
             <form onSubmit={handleSubmit(this.props.createPost)}>
                 <h3> Create a New Post </h3>
-                <div className="form-group">
-                    <label htmlFor="title">Title</label>
                     <Field
-                        name="title"                   // Specify field name
-                        component={renderInput}           // Specify render component above
-                        type="text"/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="categories">Categories</label>
-                    <Field
-                        name="categories"                   // Specify field name
-                        component={renderInput}           // Reuse same render component
-                        type="text"/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="content">Content</label>
-                    <Field
-                        name="content"
-                        component={renderTextarea} />
-                </div>
+                        name="title"
+                        component={title=>
+                            <div className="form-group">
+                                <label>Title</label>
+                                <input {...title.input} type="text" className="form-control"/>
+                                {title.meta.touched &&
+                                title.meta.error &&
+                                <span className="error">{title.meta.error}</span>}
+                            </div>
+                        }
+                        />
+
+                <Field
+                    name="categories"
+                    component={categories=>
+                        <div className="form-group">
+                            <label>Categories</label>
+                            <input {...categories.input} type="text" className="form-control"/>
+                            {categories.meta.touched &&
+                            categories.meta.error &&
+                            <span className="error">{categories.meta.error}</span>}
+                        </div>
+                    }
+                />
+
+                <Field
+                    name="content"
+                    component={content=>
+                        <div className="form-group">
+                            <label>Content</label>
+                            <textarea {...content.input} className="form-control"/>
+                            {content.meta.touched &&
+                            content.meta.error &&
+                            <span className="error">{content.meta.error}</span>}
+                        </div>
+                    }
+                />
+
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
         );
     }
 }
 
+function validate(values) {
+    const errors={};
+
+    if(!values.title){
+        errors.title='Enter a title';
+    }
+    if(!values.categories){
+        errors.categories='Enter categories';
+    }
+    if(!values.content){
+        errors.content='Enter some content';
+    }
+
+    return errors;
+}
+
 PostsNew = reduxForm({
-    form: 'PostsNewForm'
+    form: 'PostsNewForm',
+    validate
 })(PostsNew);
 
 PostsNew = connect(null, {createPost})(PostsNew);
