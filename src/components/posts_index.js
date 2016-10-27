@@ -7,7 +7,6 @@ import { Link } from 'react-router';
 class PostsIndex extends Component{
     //lifecycle method, only called when the component is about to render
     componentWillMount(){
-        console.log('this would be a good time to call a action creator to fetch post');
         this.props.fetchPosts();
     }
 
